@@ -15,7 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser'
   styleUrls: ['./data-export.component.scss']
 })
 export class DataExportComponent implements OnInit {
-  public captchaControl: UntypedFormControl = new UntypedFormControl('', [Validators.required, Validators.minLength(5)])
+  public captchaControl: UntypedFormControl = new UntypedFormControl('', [Validators.required, Validators.minLength(11)])
   public formatControl: UntypedFormControl = new UntypedFormControl('', [Validators.required])
   public captcha: any
   private dataRequest: any = undefined
@@ -25,13 +25,13 @@ export class DataExportComponent implements OnInit {
   public presenceOfCaptcha: boolean = false
   public userData: any
 
-  constructor (public sanitizer: DomSanitizer, private readonly imageCaptchaService: ImageCaptchaService, private readonly dataSubjectService: DataSubjectService) { }
-  ngOnInit () {
+  constructor(public sanitizer: DomSanitizer, private readonly imageCaptchaService: ImageCaptchaService, private readonly dataSubjectService: DataSubjectService) { }
+  ngOnInit() {
     this.needCaptcha()
     this.dataRequest = {}
   }
 
-  needCaptcha () {
+  needCaptcha() {
     const nowTime = new Date()
     const timeOfCaptcha = localStorage.getItem('lstdtxprt') ? new Date(JSON.parse(String(localStorage.getItem('lstdtxprt')))) : new Date(0)
     if (nowTime.getTime() - timeOfCaptcha.getTime() < 300000) {
@@ -40,13 +40,13 @@ export class DataExportComponent implements OnInit {
     }
   }
 
-  getNewCaptcha () {
+  getNewCaptcha() {
     this.imageCaptchaService.getCaptcha().subscribe((data: any) => {
       this.captcha = this.sanitizer.bypassSecurityTrustHtml(data.image)
     })
   }
 
-  save () {
+  save() {
     if (this.presenceOfCaptcha) {
       this.dataRequest.answer = this.captchaControl.value
     }
@@ -67,7 +67,7 @@ export class DataExportComponent implements OnInit {
     })
   }
 
-  resetForm () {
+  resetForm() {
     this.captchaControl.markAsUntouched()
     this.captchaControl.markAsPristine()
     this.captchaControl.setValue('')
@@ -76,7 +76,7 @@ export class DataExportComponent implements OnInit {
     this.formatControl.setValue('')
   }
 
-  resetFormError () {
+  resetFormError() {
     this.captchaControl.markAsUntouched()
     this.captchaControl.markAsPristine()
     this.captchaControl.setValue('')
